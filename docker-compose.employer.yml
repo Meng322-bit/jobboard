@@ -1,0 +1,25 @@
+services:
+  job-listing-service:
+    build: ./job-listing-service
+    ports:
+      - "5003:5003"
+    env_file: ./.env
+    environment:
+      - PORT=5003
+
+  applicant-view-service:
+    build: ./applicant-view-service
+    ports:
+      - "5004:5004"
+    env_file: ./.env
+    environment:
+      - PORT=5004
+
+  job-search-service:
+    build: ./job-search-service
+    ports:
+      - "5005:5005"
+    env_file: ./.env
+    environment:
+      - PORT=5005
+      - INSTANCE_NAME=search-employer-ec2

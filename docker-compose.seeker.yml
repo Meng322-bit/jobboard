@@ -1,0 +1,18 @@
+services:
+  application-service:
+    build: ./application-service
+    ports:
+      - "5006:5006"
+    env_file: ./.env
+    environment:
+      - PORT=5006
+      - JOB_SEARCH_URL=http://job-search-service:5005
+
+  job-search-service:
+    build: ./job-search-service
+    ports:
+      - "5005:5005"
+    env_file: ./.env
+    environment:
+      - PORT=5005
+      - INSTANCE_NAME=search-seeker-ec2
