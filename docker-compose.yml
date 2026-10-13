@@ -1,0 +1,58 @@
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "5000:5000"
+    env_file: ./api-gateway/.env
+    environment:
+      - REGISTER_SERVICE_URL=http://registration-service:5001
+      - LOGIN_SERVICE_URL=http://login-service:5002
+      - JOB_LISTING_SERVICE_URL=http://job-listing-service:5003
+      - APPLICANT_SERVICE_URL=http://applicant-view-service:5004
+      - JOB_SEARCH_SERVICE_URL=http://job-search-service:5005
+      - APPLICATION_SERVICE_URL=http://application-service:5006
+    depends_on:
+      - registration-service
+      - login-service
+      - job-listing-service
+      - applicant-view-service
+      - job-search-service
+      - application-service
+
+  registration-service:
+    build: ./registration-service
+    ports:
+      - "5001:5001"
+    env_file: ./registration-service/.env
+
+  login-service:
+    build: ./login-service
+    ports:
+      - "5002:5002"
+    env_file: ./login-service/.env
+
+  job-listing-service:
+    build: ./job-listing-service
+    ports:
+      - "5003:5003"
+    env_file: ./job-listing-service/.env
+
+  applicant-view-service:
+    build: ./applicant-view-service
+    ports:
+      - "5004:5004"
+    env_file: ./applicant-view-service/.env
+
+  job-search-service:
+    build: ./job-search-service
+    ports:
+      - "5005:5005"
+    env_file: ./job-search-service/.env
+
+  application-service:
+    build: ./application-service
+    ports:
+      - "5006:5006"
+    env_file: ./application-service/.env
+    environment:
+      - JOB_SEARCH_URL=http://job-search-service:5005
