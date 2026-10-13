@@ -9,15 +9,25 @@ services:
       - LOGIN_SERVICE_URL=http://login-service:5002
       - JOB_LISTING_SERVICE_URL=http://job-listing-service:5003
       - APPLICANT_SERVICE_URL=http://applicant-view-service:5004
-      - JOB_SEARCH_SERVICE_URL=http://job-search-service:5005
+      - JOB_SEARCH_SERVICE_URL=http://nginx:8080
       - APPLICATION_SERVICE_URL=http://application-service:5006
     depends_on:
       - registration-service
       - login-service
       - job-listing-service
       - applicant-view-service
-      - job-search-service
+      - nginx
       - application-service
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - job-search-service
+      - job-search-service-2
 
   registration-service:
     build: ./registration-service
@@ -48,6 +58,16 @@ services:
     ports:
       - "5005:5005"
     env_file: ./job-search-service/.env
+    environment:
+      - INSTANCE_NAME=search-1
+
+  job-search-service-2:
+    build: ./job-search-service
+    ports:
+      - "5015:5005"
+    env_file: ./job-search-service/.env
+    environment:
+      - INSTANCE_NAME=search-2
 
   application-service:
     build: ./application-service

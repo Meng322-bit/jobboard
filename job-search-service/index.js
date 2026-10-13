@@ -1,4 +1,5 @@
 require('dotenv').config({ path: require('path').join(__dirname, '.env'), override: true });
+const os = require('os');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const connectDB = require('./db');
@@ -8,6 +9,9 @@ const app = express();
 app.use(express.json());
 
 connectDB();
+
+// Name shown in responses so a load balancer demo can show which copy answered
+const INSTANCE_NAME = process.env.INSTANCE_NAME || os.hostname();
 
 // Reads the JWT and only lets seekers through
 function seekerOnly(req, res, next) {
@@ -42,7 +46,7 @@ app.get('/jobs', seekerOnly, async (req, res) => {
     if (category) filter.category = { $regex: escapeRegex(category), $options: 'i' };
 
     const jobs = await Job.find(filter).sort({ createdAt: -1 });
-    res.json({ count: jobs.length, jobs });
+    res.json({ servedBy: INSTANCE_NAME, count: jobs.length, jobs });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -66,5 +70,5 @@ app.get('/jobs/:id', seekerOnly, async (req, res) => {
 
 const PORT = process.env.PORT || 5005;
 app.listen(PORT, () => {
-  console.log(`Job Search service running on port ${PORT}`);
+  console.log(`Job Search service running on port ${PORT} (${INSTANCE_NAME})`);
 });
