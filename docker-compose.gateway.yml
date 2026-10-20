@@ -8,10 +8,10 @@ services:
       - PORT=5000
       - REGISTER_SERVICE_URL=http://registration-service:5001
       - LOGIN_SERVICE_URL=http://login-service:5002
-      - JOB_LISTING_SERVICE_URL=http://172.31.44.237:5003
-      - APPLICANT_SERVICE_URL=http://172.31.44.237:5004
+      - JOB_LISTING_SERVICE_URL=http://172.31.31.68:5003
+      - APPLICANT_SERVICE_URL=http://172.31.31.68:5004
       - JOB_SEARCH_SERVICE_URL=http://nginx:8080
-      - APPLICATION_SERVICE_URL=http://172.31.33.223:5006
+      - APPLICATION_SERVICE_URL=http://172.31.31.99:5006
     depends_on:
       - registration-service
       - login-service
